@@ -1,0 +1,120 @@
+# Copyright 2026 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cisco_meraki_mcp"]
+
+[project]
+name = "cisco_meraki_mcp"
+version = "0.1.0"
+authors = [{ name = "Meraki MCP OSS", email = "meraki-mcp-oss@external.cisco.com" }]
+description = "MCP server for semantic search and execution of Meraki Dashboard API endpoints"
+readme = "README.md"
+repository = "https://github.com/CiscoDevNet/meraki-mcp-official"
+keywords = ["ai", "mcp", "meraki"]
+requires-python = ">=3.14"
+license = "Apache-2.0"
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "authlib>=1.7.2",
+    "cryptography>=49.0.0",
+    # Security: unresolved path-traversal (Zip/Tar Slip) in fastembed's
+    # model-archive extraction (qdrant/fastembed#626, no CVE/GHSA yet).
+    # Low risk here (only trusted models fetched at startup), but keep
+    # flagged until fixed upstream.
+    # https://github.com/qdrant/fastembed/issues/626
+    "fastembed>=0.8.0",
+    "fastmcp>=3.4.2",
+    "meraki==4.3.0",
+    "numpy>=2.5.0",
+    "openapi-pydantic>=0.5.1",
+    "pydantic>=2.13.4",
+    "pydantic-settings>=2.14.2",
+]
+
+[project.scripts]
+cisco-meraki-mcp = "cisco_meraki_mcp._entry:run"
+
+[tool.ruff]
+target-version = "py314"
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+preview = true
+
+[tool.ruff.lint]
+select = [
+    "A",    # flake8-builtins
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "C90",  # mccabe complexity
+    "E",    # pycodestyle error
+    "F",    # Pyflakes
+    "FURB", # refurb (modernization)
+    "I",    # isort
+    "N",    # pep8-naming
+    "PERF", # perflint (performance)
+    "PL",   # pylint
+    "PT",   # flake8-pytest-style
+    "RET",  # flake8-return
+    "RUF",  # ruff-specific rules
+    "S",    # flake8-bandit (security)
+    "SIM",  # flake8-simplify
+    "T20",  # flake8-print
+    "UP",   # pyupgrade
+    "W",    # pycodestyle warning
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 4
+
+[tool.ruff.lint.pylint]
+max-args = 5
+max-branches = 10
+max-returns = 3
+max-statements = 10
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "C90", "S101", "S106", "PLR2004", "PL"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "pytest-mock>=3.15.1",
+    "pytest-randomly>=4.1.0",
+    "ruff>=0.15.18",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
