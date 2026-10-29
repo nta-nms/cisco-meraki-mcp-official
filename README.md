@@ -11,12 +11,6 @@ Use it to build agents that answer questions about your network, generate
 reports, troubleshoot connectivity issues, and audit configurations—without
 writing custom API integration code.
 
-> **Beta notice:** Cisco Meraki MCP Server is currently in beta.
-> Features, tool schemas, supported API capabilities, and client configuration
-> may change, including in ways that are not backward compatible. Cisco
-> reserves the right to make breaking changes during the beta period to
-> incorporate feedback and improvements.
-
 ## What Is MCP?
 
 [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open
